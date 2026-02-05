@@ -1,0 +1,175 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Deck Capacity Calculator</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+
+<body>
+    <div class="background-globes">
+        <div class="globe globe-1"></div>
+        <div class="globe globe-2"></div>
+    </div>
+
+    <main class="container">
+        <header>
+            <h1>Deck Capacity Calculator</h1>
+            <p>Estimate your deck's risk under snow and ice loads.</p>
+        </header>
+
+        <form id="calculator-form">
+            <section class="card">
+                <h2>Deck Details</h2>
+                <div class="deck-inputs">
+                    <div class="grid-2">
+                        <div class="input-group">
+                            <label for="deckType">Deck Type</label>
+                            <select id="deckType" name="deckType">
+                                <option value="attached">Attached to House</option>
+                                <option value="freestanding">Free Standing</option>
+                            </select>
+                        </div>
+                        <div class="input-group">
+                            <label for="postCount">Number of Posts</label>
+                            <input type="number" id="postCount" name="postCount" min="1" value="4" placeholder="e.g. 4">
+                        </div>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="postSize">Post Size</label>
+                        <select id="postSize" name="postSize">
+                            <option value="4x4">4x4</option>
+                            <option value="6x6" selected>6x6</option>
+                        </select>
+                    </div>
+
+                    <div class="input-group">
+                        <label for="deckShape">Deck Shape</label>
+                        <select id="deckShape" name="deckShape">
+                            <option value="rectangle">Rectangle (Standard)</option>
+                            <option value="l-shape">L-Shape</option>
+                            <option value="custom">Custom Area</option>
+                        </select>
+                    </div>
+
+                    <!-- Standard / Main Section Inputs -->
+                    <div id="section-main" class="grid-2">
+                        <div class="input-group">
+                            <label id="label-width" for="width">Width (ft)</label>
+                            <input type="number" id="width" name="width" step="0.5" min="1" placeholder="e.g. 10">
+                        </div>
+                        <div class="input-group">
+                            <label id="label-length" for="length">Length (ft)</label>
+                            <input type="number" id="length" name="length" step="0.5" min="1" placeholder="e.g. 12">
+                        </div>
+                    </div>
+
+                    <!-- L-Shape Extension Inputs (Hidden by default) -->
+                    <div id="section-extension" class="hidden grid-2">
+                        <div class="input-divider">Extension Section</div>
+                        <div class="input-group">
+                            <label for="extWidth">Ext. Width (ft)</label>
+                            <input type="number" id="extWidth" name="extWidth" step="0.5" min="0" placeholder="e.g. 5">
+                        </div>
+                        <div class="input-group">
+                            <label for="extLength">Ext. Length (ft)</label>
+                            <input type="number" id="extLength" name="extLength" step="0.5" min="0"
+                                placeholder="e.g. 5">
+                        </div>
+                    </div>
+
+                    <!-- Custom Area Input (Hidden by default) -->
+                    <div id="section-custom" class="hidden">
+                        <div class="input-group">
+                            <label for="customArea">Total Area (sq ft)</label>
+                            <input type="number" id="customArea" name="customArea" step="1" min="1"
+                                placeholder="e.g. 200">
+                        </div>
+                    </div>
+                </div>
+
+                <div class="deck-stats">
+                    <div class="stat-item">
+                        <span class="stat-label">Structural Capacity</span>
+                        <span class="stat-value" id="detailTotalCapacity">0 lbs</span>
+                    </div>
+                    <div class="stat-item">
+                        <span class="stat-label">Est. Total Load</span>
+                        <span class="stat-value" id="detailCurrentLoad">0 lbs</span>
+                    </div>
+                </div>
+            </section>
+
+            <section class="card">
+                <h2>Snow & Ice Conditions</h2>
+                <div class="grid-2">
+                    <div class="input-group">
+                        <label for="snowType">Condition Type</label>
+                        <select id="snowType" name="snowType">
+                            <option value="dry">Dry Snow (Light/Powdery)</option>
+                            <option value="wet">Wet Snow (Heavy)</option>
+                            <option value="ice">Solid Ice</option>
+                        </select>
+                    </div>
+                    <div class="input-group">
+                        <label for="depth">Depth (Inches)</label>
+                        <input type="number" id="depth" name="depth" step="0.5" min="0" value="0" placeholder="e.g. 6">
+                    </div>
+                </div>
+            </section>
+        </form>
+
+        <section id="results" class="card results hidden">
+            <div id="status-indicator" class="status safe">
+                <span class="status-icon">✓</span>
+                <span class="status-text">Likely Safe</span>
+            </div>
+
+            <div class="metrics-grid">
+                <div class="metric">
+                    <span class="label">Snow Load</span>
+                    <span class="value" id="snowLoadVal">0 psf</span>
+                </div>
+                <div class="metric">
+                    <span class="label">Total Snow Weight</span>
+                    <span class="value" id="totalWeightVal">0 lbs</span>
+                </div>
+                <div class="metric">
+                    <span class="label">Load Per Post (Est.)</span>
+                    <span class="value" id="loadPerPostVal">0 lbs</span>
+                </div>
+            </div>
+
+            <p id="recommendation" class="recommendation-text">
+                Current estimating loads are within standard residential limits (40-60 psf).
+            </p>
+        </section>
+
+        <footer>
+            <div class="disclaimer-box">
+                <strong>⚠️ IMPORTANT DISCLAIMER</strong>
+                <p>
+                    This application provides <strong>estimates only</strong> based on general data. It is
+                    <strong>NOT</strong> a substitute for a professional structural assessment. Local building codes,
+                    material age, and construction quality significantly impact safety.
+                    <br><br>
+                    <strong>Capacity Calculation:</strong> "Structural Capacity" is estimated based on standard
+                    residential code design loads (50 psf) or conservative post limits, whichever is lower. This assumes
+                    your deck was built to standard building codes.
+                    <br><br>
+                    <strong>Always consult a licensed structural engineer or building professional</strong> to verify
+                    the safety of your specific deck.
+                </p>
+            </div>
+        </footer>
+    </main>
+    <script src="script.js"></script>
+</body>
+
+</html>
